@@ -1,1 +1,1 @@
-from ._vector_store import vectorstore_retriever
+from ._vector_store import vectorstore_retriever, format_docs

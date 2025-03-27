@@ -1,7 +1,8 @@
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from models import embeddings
 
 
 urls = [
@@ -9,6 +10,10 @@ urls = [
     "https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/",
     "https://lilianweng.github.io/posts/2023-10-25-adv-attack-llm/",
 ]
+
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
 
 def document_splitters():
@@ -32,7 +37,7 @@ def vectorstore_retriever():
     vector_storage = Chroma.from_documents(
         documents=document_splitters(),
         collection_name="rag-chroma",
-        embedding=OpenAIEmbeddings()
+        embedding=embeddings()
     )
     retriever = vector_storage.as_retriever()
     return retriever
