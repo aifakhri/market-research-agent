@@ -4,6 +4,7 @@ from utils import vectorstore_retriever
 
 
 def retriever():
+    """Search and return information about Lilian WEng blog post on LLM Agent"""
     retriever_tool = create_retriever_tool(
         vectorstore_retriever,
         "retrieve_blog_posts",
