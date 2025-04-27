@@ -1,7 +1,9 @@
-from retriever import RetrieverToolBuilder
+from retriever import create_retriever_tool
 
 
+def load_tools():
+    tools = [
+        create_retriever_tool()
+    ]
 
-__all__ = [
-    "RetrieverToolBuilder"
-]
+    return tools
