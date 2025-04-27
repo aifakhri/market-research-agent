@@ -2,23 +2,24 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
 
 
-from models import AgentState
+from models import AgentState, llm
+from tools import load_tools
 from ._nodes import (
     AgentNode,
-    RetrieveNode,
     RewriteNode,
     GenerateNode,
     GradeDocsNode
 ) 
 
 
-state = AgentState()
-
-
 class AgenticGraph:
-    def __init__(self, retriever_tools):
+
+
+    def __init__(self):
+        self.tools = load_tools()
+        self.llm = llm()
+        self.llm_with_tools = self.llm.bind_tools(self.tools) 
         self.agent_node = AgentNode()
-        self.retriever_node = RetrieveNode(retriever_tools)
         self.grade_node = GradeDocsNode()
         self.rewrite_node = RewriteNode()
         self.generate_node = GenerateNode()
