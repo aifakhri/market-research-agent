@@ -6,6 +6,6 @@ Current development:
     - Agent tools have its own modules
     - Agent graph and its instantiation would be separated
     - Database module is no longer needed because the vector store doesn't fit the context of tools
-    
-
-# This is application with qdrant and docker
+- There would be two different branch:
+    - with Qdrant docker
+    - with Qdrant cloud (the Qdrant local would not be developed further)
