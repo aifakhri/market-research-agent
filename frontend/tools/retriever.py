@@ -70,7 +70,7 @@ def create_retriever_tool():
     splitted_docs = split_documents(docs)
 
     client = connect_to_qdrant()
-    ensure_collection(client)
+    ensure_collection(client=client, vector_size=vector_size)
 
     vectorstore = create_vectorstore(
         splitted_docs=splitted_docs, client=client, embeddings=embeddings
