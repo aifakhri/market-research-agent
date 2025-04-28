@@ -9,3 +9,5 @@ Current development:
 - There would be two different branch:
     - with Qdrant docker
     - with Qdrant cloud (the Qdrant local would not be developed further)
+
+# This branch is for cloud development
