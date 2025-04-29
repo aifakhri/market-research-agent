@@ -1,13 +1,27 @@
+from langchain_core.messages import HumanMessage
+
+from langfuse.callback import CallbackHandler
+
 from models import AgentState
+from services.agentic_agent.graph import AgenticGraph
 
 
+langfuse_handler = CallbackHandler()
 
 class Chatbot:
-    def __init__(self, graph):
-        self.graph = graph
+    def __init__(self):
         self.state = AgentState()
+        self.graph = AgenticGraph().build()
 
-    def chat(self, query: str):
-        result = self.graph.invoke(self.state)
+    def chat(self, user_input: str):
+        user_message = {
+            "messages": [
+                ("user", user_input)
+            ]
+        }
 
-        return result
+        # state = AgentState(messages=[HumanMessage(content=user_input)])
+        result = self.graph.invoke(
+            user_message,
+            config={"callbacks": [langfuse_handler]})
+        return result["messages"]
