@@ -1,17 +1,10 @@
-from .chat_state import AgentState, GradeState
-from .chat_model import llm
-from .chat_evaluators import (
-    CorrectnessGrade,
-    RelevanceGrade,
-    GroundedGrade
-)
+from ._chat import AgentState, GradeState
+from ._api import ChatRequest, ChatResponse
+
 
 __all__ = [
-    "llm",
-    "embeddings",
-    "AgentState",
-    "Grade",
-    "CorrectnessGrade",
-    "RelevanceGrade",
-    "GroundedGrade"
+    AgentState,
+    GradeState,
+    ChatRequest,
+    ChatResponse
 ]
