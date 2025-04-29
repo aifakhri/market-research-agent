@@ -15,7 +15,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 OPENAI_EMBEDDING = os.environ.get("OPENAI_EMBEDDING")
 
 # QDRANT
-QDRANT_ADDRESS = os.environ.get("QDRANT_ADDRESS")
+QDRANT_URL = os.environ.get("QDRANT_URL")
 QDRANT_COLLECTION = os.environ.get("QDRANT_COLLECTION")
 QDRANT_API_KEY = os.environ.get("QDRANT_API_KEY")
 
