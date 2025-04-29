@@ -11,5 +11,5 @@ from langgraph.graph.message import add_messages
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
 
-class Grade(BaseModel):
+class GradeState(BaseModel):
     binary_score: str=Field(description="Relevance score 'yes' or 'no'")
