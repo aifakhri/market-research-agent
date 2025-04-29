@@ -1,34 +1,52 @@
+import os
+import requests
 import streamlit as st
 
-from services.agentic_agent.controller import Chatbot
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
-@st.cache_resource
-def load_chatbot():
-    return Chatbot()
+CHAT_API_URL = os.environ.get("CHAT_API_URL")
 
-# Initialize
-st.set_page_config(page_title="Agentic RAG Chatbot", page_icon="🤖")
+st.set_page_config(page_title="Agentic RAG Chatbot")
 st.title("Agentic RAG Chatbot")
-
-bot = load_chatbot()
 
 # Set up session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-user_input = st.chat_input("Ask me anything about the documents...")
 
-if user_input:
-    # Let chatbot handle interaction
-    updated_messages = bot.chat(user_input)
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-    # Save updated conversation
-    st.session_state.messages = updated_messages
 
-# isplay conversation
-for msg in st.session_state.messages:
-    if msg.type == "human":
-        st.chat_message("user").markdown(msg.content)
-    else:
-        st.chat_message("assistant").markdown(msg.content)
+if prompt := st.chat_input("Ask me anything about the documents..."):
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # Append new prompt (message) from user
+    st.session_state.messages.append({
+        "role": "user",
+        "content": prompt
+    })
+
+    try:
+        with st.chat_message("assistant"):
+            response = requests.post(CHAT_API_URL, json={"question": prompt})
+            response.raise_for_status()
+
+            ai_message = response.json()["answer"]
+
+            st.markdown(ai_message)
+
+        st.session_state.messages.append(
+            {
+                "role": "asistant",
+                "content": ai_message
+            }
+        )
+
+    except Exception as e:
+        st.error(f"Something went wrong: {str(e)}")
