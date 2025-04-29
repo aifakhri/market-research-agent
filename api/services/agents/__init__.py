@@ -1,1 +1,1 @@
-from .controller import Chatbot
+from .graph import AgenticGraph
