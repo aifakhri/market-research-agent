@@ -1,1 +1,1 @@
-from ._graph import Chatbot
+from .controller import Chatbot
