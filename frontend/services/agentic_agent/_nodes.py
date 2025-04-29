@@ -2,7 +2,7 @@ from langchain import hub
 from langchain_core.messages import HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 
-from langgraph.prebuilt import ToolNode
+from langfuse.decorators import observe
 
 from langsmith import traceable
 
@@ -11,30 +11,35 @@ from models import AgentState
 
 
 class AgentNode:
-    def __init__(self, llm_with_tools):
-        self.llm = llm_with_tools
+    def __init__(self, llm, tools):
+        self.llm_with_tool = llm.bind_tools(tools)
 
+    @observe()
     def run(self, state: AgentState) -> AgentState:
         """
         """
 
+        print("---CALL AGENT---")
+
         # Get the message from the state
         messages = state["messages"]
+        print(f"Agent message: {messages}")
 
         # Get response from LLM
-        response = self.llm.invoke(messages)
+        response = self.llm_with_tool.invoke(messages)
 
         # Store the response in the messages
-        return {"message": [response]}
+        return {"messages": [response]}
 
 class RewriteNode:
     def __init__(self, llm):
         self.llm = llm
 
+    @observe()
     def run(self, state: AgentState) -> AgentState:
-        print("--TRANSFORM QUERY--")
+        print("---TRANSFORM QUERY---")
         messages = state["messages"]
-        query = messages[0].content
+        question = messages[0].content
 
         msg = [
             HumanMessage(
@@ -42,7 +47,7 @@ class RewriteNode:
                     Look at the input and try to reason about the underying semantinc intent / meaning \n
                     Here is the initial question:
                     \n ------ \n
-                    {query}
+                    {question}
                     \n ------ \n
                     Formulate an improved question:
                 """
@@ -57,8 +62,9 @@ class GenerateNode:
     def __init__(self, llm):
         self.llm = llm
 
+    @observe()
     def run(self, state: AgentState) -> AgentState:
-        print("--GENERATE--")
+        print("---GENERATE---")
         messages = state["messages"]
         question = messages[0].content
         last_message = messages[-1]
