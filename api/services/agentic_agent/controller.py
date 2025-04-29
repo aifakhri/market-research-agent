@@ -3,7 +3,7 @@ from langchain_core.messages import HumanMessage
 from langfuse.callback import CallbackHandler
 
 from models import AgentState
-from services.agentic_agent.graph import AgenticGraph
+from services.agentic_agent._graph import AgenticGraph
 
 
 langfuse_handler = CallbackHandler()
