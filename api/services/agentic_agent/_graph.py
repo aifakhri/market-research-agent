@@ -1,8 +1,9 @@
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from models import AgentState, llm
+from models import AgentState
 from tools import load_tools
+from ._llm import chat_model
 from ._edges import GradeEdge
 from ._nodes import (
     AgentNode,
@@ -13,13 +14,13 @@ from ._nodes import (
 
 class AgenticGraph:
     def __init__(self):
-        self.llm = llm()
+        self.model = chat_model()
         self.tools = load_tools()
-        self.agent_node = AgentNode(llm=self.llm, tools=self.tools)
+        self.agent_node = AgentNode(llm=self.model, tools=self.tools)
         self.retrieve_node = ToolNode(self.tools)
-        self.rewrite_node = RewriteNode(llm=self.llm)
-        self.generate_node = GenerateNode(llm=self.llm)
-        self.grade_edge = GradeEdge(llm=self.llm)
+        self.rewrite_node = RewriteNode(llm=self.model)
+        self.generate_node = GenerateNode(llm=self.model)
+        self.grade_edge = GradeEdge(llm=self.model)
 
     def build(self):
         workflow = StateGraph(AgentState)
