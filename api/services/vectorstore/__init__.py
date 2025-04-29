@@ -1,9 +1,6 @@
-from .retriever import build_retriever_tool
+from services.vectorstore.qdrant import QdrantVectorDB
 
 
-def load_tools():
-    tools = [
-        build_retriever_tool()
-    ]
 
-    return tools
+def load_vectorstore() -> QdrantVectorDB:
+    return QdrantVectorDB()
